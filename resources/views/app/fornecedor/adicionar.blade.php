@@ -11,20 +11,28 @@
 
         <div class="menu">
             <ul>
-                <li><a href="{{route('app.fornecedor.adicionar')}}">Novo</a></li>
-                <li><a href="{{route('app.fornecedor')}}">Consulta</a></li>
+                <li><a href="{{ route('app.fornecedor.adicionar') }}">Novo</a></li>
+                <li><a href="{{ route('app.fornecedor') }}">Consulta</a></li>
             </ul>
 
         </div>
 
         <div class="informacao-pagina">
+
+            {{ $msg ?? '' }}
             <div style="width: 30%; margin-left: auto; margin-right: auto;">
-                <form method="POST" action="">
-                    <input type="text" name="nome" placeholder="Nome" class="borda-preta">
-                    <input type="text" name="site" placeholder="Site" class="borda-preta">
-                    <input type="text" name="uf" placeholder="UF" class="borda-preta">
-                    <input type="text" name="email" placeholder="Email" class="borda-preta">
-                    <button type="submit" class="borda-preta">Buscar</button>
+                <form method="POST" action="{{ route('app.fornecedor.adicionar') }}">
+                    @csrf
+                    <input type="text" name="nome" placeholder="Nome" class="borda-preta" value="{{ old('nome') }}">
+                    {{ $errors->has('nome') ? $errors->first('nome') : '' }}
+                    <input type="text" name="site" placeholder="Site" class="borda-preta" value="{{ old('site') }}">
+                    {{ $errors->has('site') ? $errors->first('site') : '' }}
+                    <input type="text" name="uf" placeholder="UF" class="borda-preta" value="{{ old('uf') }}">
+                    {{ $errors->has('uf') ? $errors->first('uf') : '' }}
+                    <input type="text" name="email" placeholder="Email" class="borda-preta"
+                        value="{{ old('email') }}">
+                    {{ $errors->has('email') ? $errors->first('email') : '' }}
+                    <button type="submit" class="borda-preta">Cadastrar</button>
                 </form>
             </div>
         </div>
