@@ -12,25 +12,28 @@ class FornecedorSeeder extends Seeder
      */
     public function run()
     {
-        $fornecedor = new Fornecedor();
-        $fornecedor->nome = 'Fornecedor 1';
-        $fornecedor->site = 'fornecedor1.com.br';
-        $fornecedor->uf = 'SP';
-        $fornecedor->email = 'fornecedor1@contato.com';
-        $fornecedor->save();
+        // $fornecedor = new Fornecedor();
+        // $fornecedor->nome = 'Fornecedor 1';
+        // $fornecedor->site = 'fornecedor1.com.br';
+        // $fornecedor->uf = 'SP';
+        // $fornecedor->email = 'fornecedor1@contato.com';
+        // $fornecedor->save();
 
-        Fornecedor::create([
-            'nome' => 'Fornecedor 2',
-            'site' => 'fornecedor2.com.br',
-            'uf' => 'RJ',
-            'email' => 'fornecedor2@contato.com'
-        ]);
+        // Fornecedor::create([
+        //     'nome' => 'Fornecedor 2',
+        //     'site' => 'fornecedor2.com.br',
+        //     'uf' => 'RJ',
+        //     'email' => 'fornecedor2@contato.com'
+        // ]);
 
-        DB::table('fornecedores')->insert([
-            'nome' => 'Fornecedor 3',
-            'site' => 'fornecedor3.com.br',
-            'uf' => 'MG',
-            'email' => 'fornecedor3@contato.com'
-        ]);
+        // DB::table('fornecedores')->insert([
+        //     'nome' => 'Fornecedor 3',
+        //     'site' => 'fornecedor3.com.br',
+        //     'uf' => 'MG',
+        //     'email' => 'fornecedor3@contato.com'
+        // ]);
+
+        factory(Fornecedor::class, 10)->create();
+
     }
 }
