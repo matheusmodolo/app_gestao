@@ -22,12 +22,12 @@ class CreateUnidadesTable extends Migration
 
 
         Schema::table('produtos', function(Blueprint $table){
-            $table->unsignedBigInteger('unidade_id');
+            $table->unsignedBigInteger('unidade_id')->after('peso');
             $table->foreign('unidade_id')->references('id')->on('unidades');
         });
 
         Schema::table('produto_detalhes', function(Blueprint $table){
-            $table->unsignedBigInteger('unidade_id');
+            $table->unsignedBigInteger('unidade_id')->after('altura');
             $table->foreign('unidade_id')->references('id')->on('unidades');
         });
     }
