@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Produto;
 use App\ProdutoDetalhe;
 use App\Unidade;
+use App\Fornecedor;
 use Illuminate\Http\Request;
 
 class ProdutoController extends Controller
@@ -30,7 +31,8 @@ class ProdutoController extends Controller
     {
 
         $unidades = Unidade::all();
-        return view('app.produto.create', ['unidades' => $unidades]);
+        $fornecedores = Fornecedor::all();
+        return view('app.produto.create', ['unidades' => $unidades, 'fornecedores' => $fornecedores]);
     }
 
     /**
@@ -86,43 +88,50 @@ class ProdutoController extends Controller
     public function edit(Produto $produto)
     {
         $unidades = Unidade::all();
-        return view('app.produto.edit', ['produto' => $produto, 'unidades' => $unidades]);
+        $fornecedores = Fornecedor::all();
+        return view('app.produto.edit', ['produto' => $produto, 'unidades' => $unidades, 'fornecedores' => $fornecedores]);
         // return view('app.produto.create', ['produto' => $produto, 'unidades' => $unidades]);
     }
 
+
     /**
-     * Update the specified resource in storage.
+     * Update the specified product in storage.
+     *
+     * Validates the incoming request data according to defined rules and updates
+     * the specified product with the validated data. After updating, redirects
+     * to the product's detail page.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Produto  $produto
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+
+    public function update(Request $request, Produto $produto)
     {
         $regras = [
             'nome' => 'required|min:3|max:100',
             'descricao' => 'required|min:3|max:255',
             'peso' => 'required|numeric|min:0',
-            'unidade_id' => 'exists:unidades,id'
+            'unidade_id' => 'exists:unidades,id',
+            'fornecedor_id' => 'exists:fornecedores,id'
         ];
 
         $feedback = [
             'required' => 'O campo "' . ucfirst(':attribute') . '" deve ser preenchido',
             'nome.min' => 'O campo "Nome" deve ter no mínimo 3 caracteres',
-            'nome.max' => 'O campo "Nome" deve ter no.maxcdn 100 caracteres',
+            'nome.max' => 'O campo "Nome" deve ter no máximo 100 caracteres',
             'descricao.min' => 'O campo "Descrição" deve ter no mínimo 3 caracteres',
-            'descricao.max' => 'O campo "Descrição" deve ter no.maxcdn 255 caracteres',
+            'descricao.max' => 'O campo "Descrição" deve ter no máximo 255 caracteres',
             'peso.numeric' => 'O campo "Peso" deve ser numérico',
-            'unidade_id.exists' => 'A unidade de medida informada não existe'
+            'unidade_id.exists' => 'A unidade de medida informada não existe',
+            'fornecedor_id.exists' => 'O fornecedor informado não existe'
         ];
 
         $request->validate($regras, $feedback);
 
-        $produto = Produto::find($id);
-
         $produto->update($request->all());
 
-        return redirect()->route('produto.index');
+        return redirect()->route('produto.show', ['produto' => $produto->id]);
     }
 
     /**
