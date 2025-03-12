@@ -15,7 +15,7 @@ class ClienteController extends Controller
     public function index(Request $request)
     {
         // A paginação precisa do request
-        $clientes = Cliente::paginate(10);
+        $clientes = Cliente::orderby('updated_at', 'desc')->paginate(10);
         return view('app.cliente.index', ['clientes' => $clientes, 'request' => $request->all()]);
     }
 
@@ -27,6 +27,7 @@ class ClienteController extends Controller
     public function create()
     {
         //
+        return view('app.cliente.create');
     }
 
     /**
@@ -38,6 +39,22 @@ class ClienteController extends Controller
     public function store(Request $request)
     {
         //
+        $regras = [
+            'nome' => 'required|min:3|max:100',
+        ];
+        $feedback = [
+            'required' => 'O campo :attribute deve ser preenchido',
+            'min' => 'O campo :attribute deve ter no minimo 3 caracteres',
+            'max' => 'O campo :attribute deve ter no maximo 100 caracteres',
+        ];
+
+        $request->validate($regras, $feedback);
+
+        $cliente = new Cliente();
+        $cliente->nome = $request->get('nome');
+        $cliente->save();
+
+        return redirect()->route('cliente.index');
     }
 
     /**
@@ -46,9 +63,9 @@ class ClienteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Cliente $cliente)
     {
-        //
+        return view('app.cliente.show', ['cliente' => $cliente]);
     }
 
     /**
@@ -57,9 +74,9 @@ class ClienteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Cliente $cliente)
     {
-        //
+        return view('app.cliente.edit', ['cliente' => $cliente]);
     }
 
     /**
@@ -69,9 +86,23 @@ class ClienteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Cliente $cliente)
     {
-        //
+        $regras = [
+            'nome' => 'required|min:3|max:100',
+        ];
+
+        $feedback = [
+            'required' => 'O campo :attribute deve ser preenchido',
+            'min' => 'O campo :attribute deve ter no minimo 3 caracteres',
+            'max' => 'O campo :attribute deve ter no maximo 100 caracteres',
+        ];
+
+        $request->validate($regras, $feedback);
+
+        $cliente->update($request->all());
+
+        return redirect()->route('cliente.show', ['cliente' => $cliente->id]);
     }
 
     /**
@@ -80,8 +111,10 @@ class ClienteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Cliente $cliente)
     {
-        //
+        $cliente->delete();
+
+        return redirect()->route('cliente.index');
     }
 }
