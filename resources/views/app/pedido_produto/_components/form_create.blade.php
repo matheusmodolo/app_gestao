@@ -1,7 +1,7 @@
-<form method="POST" action="{{ route('pedido-produto.store', ['pedido' => $pedido]) }}">
+<form method="POST" action="{{ route('pedido_produto.store', ['pedido' => $pedido]) }}">
     @csrf
 
-    <select name="cliente_id">
+    <select name="produto_id">
         <option>Selecione</option>
         @foreach ($produtos as $produto)
             <option value="{{ $produto->id }}" @if ((old('produto_id')) == $produto->id) selected @endif>

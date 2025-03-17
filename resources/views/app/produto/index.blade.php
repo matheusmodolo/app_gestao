@@ -14,7 +14,6 @@
                 <li><a href="{{ route('produto.create') }}">Novo</a></li>
                 <li><a href=" ">Consulta</a></li>
             </ul>
-
         </div>
 
         <div class="informacao-pagina">
@@ -60,9 +59,19 @@
                                     </form>
                                 </td>
                             </tr>
+
+                            <tr>
+                                <td colspan="11">
+                                    <p>Pedidos</p>
+                                    @foreach($produto->pedidos as $pedido)
+                                    <a href="{{route('pedido_produto.create', ['pedido' => $pedido->id])}}">
+                                        Pedido {{ $pedido->id }},
+                                    </a>
+                                    @endforeach
+                                </td>
+                            </tr>
                         @endforeach
                     </tbody>
-
                 </table>
 
                 {{ $produtos->appends($request)->links() }}
