@@ -29,7 +29,6 @@ class PedidoProdutoController extends Controller
         $produtos = Produto::all();
         $pedido->produtos; // eager load
         return view('app.pedido_produto.create', ['pedido' => $pedido, 'produtos' => $produtos]);
-
     }
 
     /**
@@ -42,22 +41,31 @@ class PedidoProdutoController extends Controller
     {
         $regras = [
             'produto_id' => 'exists:produtos,id',
+            'quantidade' => 'required|integer'
         ];
-        
-        $feedback = [
-            'exists' => 'O produto informado nao existe',
-        ];
-        
-        $request->validate($regras, $feedback);
-       
-        $pedidoProduto = new PedidoProduto();
-        $pedidoProduto->pedido_id = $pedido->id;
-        $pedidoProduto->produto_id = $request->get('produto_id');
 
-        $pedidoProduto->save();
+        $feedback = [
+            'produto_id.exists' => 'O produto informado nao existe',
+            'required' => 'O campo :attribute deve ser preenchido',
+            'integer' => 'O campo :attribute deve ser um número inteiro'
+        ];
+
+        $request->validate($regras, $feedback);
+
+        // $pedidoProduto = new PedidoProduto();
+        // $pedidoProduto->pedido_id = $pedido->id;
+        // $pedidoProduto->produto_id = $request->get('produto_id');
+        // $pedidoProduto->quantidade = $request->get('quantidade');
+
+        // $pedidoProduto->save();
+
+        $pedido->produtos()->attach(
+            [
+                $request->get('produto_id') => ['quantidade' => $request->get('quantidade')]
+            ]
+        );
 
         return redirect()->route('pedido_produto.create', ['pedido' => $pedido->id]);
-
     }
 
     /**
