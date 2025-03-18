@@ -31,6 +31,7 @@
                             <th>ID</th>
                             <th>Produto</th>
                             <th>Descrição</th>
+                            <th>Data de inclusão</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -39,6 +40,7 @@
                                 <td>{{$produto->id}}</td>
                                 <td>{{$produto->nome}}</td>
                                 <td>{{$produto->descricao}}</td>
+                                <td>{{$produto->pivot->created_at->format('d/m/Y H:i:s')}}</td>
                             </tr>
                         @endforeach
                     </tbody>
